@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Do You Agree?</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f0e6;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    h1 {
+      color: #4b2e2e;
+      font-size: 2rem;
+      margin-bottom: 40px;
+      text-align: center;
+      padding: 0 10px;
+    }
+
+    .button-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 100%;
+      height: 50vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #yesBtn, #noBtn {
+      padding: 14px 28px;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      position: absolute;
+      transition: transform 0.2s ease, background-color 0.3s;
+      user-select: none;
+    }
+
+    #yesBtn {
+      background-color: #a97458;
+      color: #fff8f0;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(1);
+      z-index: 1;
+    }
+
+    #noBtn {
+      background-color: #5b3b2c;
+      color: #fff5ea;
+      left: calc(50% + 100px);
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 2;
+    }
+
+    #noBtn:hover {
+      background-color: #472a1e;
+    }
+
+    @keyframes dodgeWiggle {
+      0% { transform: scale(1) rotate(0deg); }
+      25% { transform: scale(1.1) rotate(-10deg); }
+      50% { transform: scale(1.1) rotate(10deg); }
+      75% { transform: scale(1.1) rotate(-5deg); }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+
+    .dodge-anim {
+      animation: dodgeWiggle 0.4s ease;
+    }
+
+    /* GIF styling */
+    .gif {
+      position: fixed;
+      width: 180px;
+      height: auto;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 9999;
+      user-select: none;
+    }
+
+    .gif.show {
+      opacity: 1;
+    }
+
+    /* Fixed positions */
+    #gif1 {
+      bottom: 20px;
+      left: 10px;
+    }
+
+    #gif2 {
+      bottom: 20px;
+      right: 10px;
+    }
+
+    /* Responsive tweaks */
+    @media (max-width: 600px) {
+      #yesBtn, #noBtn {
+        padding: 12px 20px;
+        font-size: 1rem;
+      }
+
+      #noBtn {
+        left: 60%;
+      }
+
+      .gif {
+        width: 130px;
+      }
+
+      h1 {
+        font-size: 1.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>CODM NA TALENG!</h1>
+
+  <div class="button-wrapper">
+    <button id="yesBtn">TARA G!</button>
+    <button id="noBtn">HINDI PO ATEH</button>
+  </div>
+
+  <!-- GIFs in fixed positions -->
+  <img
+    src="https://media.giphy.com/media/3o6wrvdHFbwBrUFenu/giphy.gif"
+    alt="Crying Girl 1"
+    id="gif1"
+    class="gif"
+  />
+  <img
+    src="https://www.icegif.com/wp-content/uploads/icegif-3639.gif"
+    alt="Crying Girl 2"
+    id="gif2"
+    class="gif"
+  />
+
+  <script>
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+    const wrapper = document.querySelector(".button-wrapper");
+
+    const gifs = [
+      document.getElementById("gif1"),
+      document.getElementById("gif2")
+    ];
+
+    let currentScale = 1;
+
+    function addDodgeEffect() {
+      noBtn.classList.add("dodge-anim");
+      setTimeout(() => {
+        noBtn.classList.remove("dodge-anim");
+      }, 400);
+    }
+
+    function moveNoButton() {
+      const wrapperRect = wrapper.getBoundingClientRect();
+      const maxX = wrapperRect.width - noBtn.offsetWidth;
+      const maxY = wrapperRect.height - noBtn.offsetHeight;
+
+      const randomX = Math.random() * maxX;
+      const randomY = Math.random() * maxY;
+
+      const useGlide = Math.random() > 0.5;
+      noBtn.style.transition = useGlide ? 'top 0.5s ease, left 0.5s ease' : 'none';
+
+      noBtn.style.left = `${randomX}px`;
+      noBtn.style.top = `${randomY}px`;
+
+      addDodgeEffect();
+      showBothGifs();
+    }
+
+    function showBothGifs() {
+      gifs.forEach(gif => gif.classList.add("show"));
+      setTimeout(() => {
+        gifs.forEach(gif => gif.classList.remove("show"));
+      }, 1500);
+    }
+
+    noBtn.addEventListener("click", () => {
+      currentScale += 0.1;
+      yesBtn.style.transform = `translate(-50%, -50%) scale(${currentScale})`;
+      moveNoButton();
+    });
+
+    noBtn.addEventListener("touchstart", moveNoButton);
+    noBtn.addEventListener("mouseenter", moveNoButton);
+
+    yesBtn.addEventListener("click", () => {
+      alert("You made the wise choice. ☕");
+    });
+  </script>
+
+</body>
+</html>
